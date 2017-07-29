@@ -25,7 +25,7 @@ SECRET_KEY = 'j53-jvml2b_tz8=brds0-bsvodf$mj!()0k*)xa))mn+c+%295'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
