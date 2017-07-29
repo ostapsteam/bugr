@@ -43,6 +43,8 @@ class Proto(models.Model):
 
 
 CMD = {}
+
+
 def register(label):
     def decorator(f):
         def wrapper(*args, **kwargs):
@@ -57,6 +59,7 @@ def help():
 
 
 def call(cmd, *args):
+    log.info("Call %s%r form %r", cmd[0], tuple(cmd[1:]), CMD)
     return CMD[cmd](*args)
 
 
