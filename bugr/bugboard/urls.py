@@ -17,5 +17,5 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^(?P<bot>[\w-]+)/$', views.dispatch),
+    url(r'^(?P<botname>[\w-]+)/$', views.dispatch),
 ]
