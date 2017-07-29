@@ -13,7 +13,7 @@ class TUser(models.Model):
 
     joined_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return "#{} ({})".format(self.uid, self.name)
 
 
@@ -45,7 +45,7 @@ class Proto(models.Model):
 
 class Proposal(Proto):
 
-    def __unicode__(self):
+    def __str__(self):
         return "/req_{} - {}".format(self.id, self.name)
 
 
@@ -53,7 +53,7 @@ class Bot(Proto):
     name = models.CharField(max_length=128, null=False, blank=False, unique=True)
     token = models.CharField(max_length=128, null=False, blank=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_url(self, method):
@@ -100,7 +100,7 @@ def my_requests(update):
     if count:
         text = "Мои заявки ({})\n\n".format(count)
         proposals = Proposal.objects.order_by("-id")[:5]
-        text += "\n".join(proposals)
+        text += "\n".join([str(p) for p in proposals])
     else:
         text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
     return text
