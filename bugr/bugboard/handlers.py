@@ -15,7 +15,11 @@ def register(label, desc=None):
 
 
 def render_cmd(label, desc=None):
-    return "{} - {}".format(label, desc if desc else DESC[label])
+    desc_text = desc if desc else DESC.get(label)
+    text = label
+    if desc_text:
+        text += " - " + desc_text
+    return text
 
 
 def call(update, cmd, *args):
