@@ -1,3 +1,5 @@
 from django.contrib import admin
+from bugr.bugboard.models import Bot, TUser
 
-# Register your models here.
+admin.site.register(Bot)
+admin.site.register(TUser)
