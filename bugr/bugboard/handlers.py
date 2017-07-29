@@ -13,9 +13,16 @@ def register(label):
 
 @register("/help")
 def help():
-    return "Хелпер"
+    return "Хелпер\n\n" \
+           "/Мои_заявки\n" \
+           "/Подать_заявку\n\n"
 
 
 def call(cmd, *args):
+    if cmd not in CMD:
+        return
     log.info("Call %s%r", cmd, tuple(args))
-    return CMD[cmd](*args)
+    try:
+        return CMD[cmd](*args)
+    except:
+        log.exception("Error")

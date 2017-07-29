@@ -65,7 +65,9 @@ class Bot(Proto):
         parts = self.prepare_command(text)
         if parts:
             cmd, *args = parts
-            self.sendMessage(chat_id=chat_id, text=call(cmd, *args))
+            text = call(cmd, *args)
+            if text:
+                self.sendMessage(chat_id=chat_id, text=text)
 
     def prepare_command(self, text):
         parts = text.split()
