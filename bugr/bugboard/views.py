@@ -16,7 +16,7 @@ def dispatch(request, botname):
         bot = Bot.objects.get(name=botname)
     except Bot.DoesNotExist:
         raise Http404("Bot {} doesn't exist".format(botname))
-    json_data = json.loads(request.body)
+    json_data = json.loads(request.body.decode('utf-8'))
     log.info("%s - %s", botname, json_data)
     resp = bot.handle(json_data)
     return HttpResponse(resp)
