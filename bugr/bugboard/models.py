@@ -1,8 +1,10 @@
 from django.db import models
 from datetime import datetime
 import logging
+import requests
 
 log = logging.getLogger(__file__)
+
 
 class TUser(models.Model):
     uid = models.CharField(max_length=16, null=False, blank=False, unique=True)
@@ -46,3 +48,18 @@ class Bot(Proto):
 
     def __unicode__(self):
         return self.name
+
+    def get_url(self, method):
+        return "https://api.telegram.org/bot{}/{}".format(self.token, method)
+
+    def sendMessage(self, **kwargs):
+        resp = requests.post(self.get_url("sendMessage"), data=kwargs)
+        assert resp.ok, resp.reason
+
+    def handle(self, request):
+
+
+
+        self.sendMessage()
+
+

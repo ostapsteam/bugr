@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'j53-jvml2b_tz8=brds0-bsvodf$mj!()0k*)xa))mn+c+%295'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -124,3 +124,23 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = "/home/bugr/static/"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+        'logfile': {
+            'level':'DEBUG',
+            'class':'logging.FileHandler',
+            'filename': BASE_DIR + "/../logfile",
+        },
+    },
+    'root': {
+        'level': 'INFO',
+        'handlers': ['console', 'logfile']
+    },
+}
