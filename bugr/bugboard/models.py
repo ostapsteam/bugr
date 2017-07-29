@@ -60,7 +60,7 @@ class Bot(Proto):
         log.info("Req: %s", msg)
         m = msg["message"]
         log.info("%r", m)
-        chat_id = msg["chat"]["id"]
+        chat_id = m["chat"]["id"]
         text = msg["message"]["text"]
         self.sendMessage(chat_id=chat_id, text="Recieve: " + text)
 
