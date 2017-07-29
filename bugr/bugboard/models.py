@@ -57,6 +57,7 @@ class Bot(Proto):
         assert resp.ok, resp.reason
 
     def handle(self, request):
+        log.handle("Req: %s", requests)
         chat_id = request["chat"]["id"]
         text = request["message"]["text"]
         self.sendMessage(chat_id=chat_id, text="Recieve: " + text)
