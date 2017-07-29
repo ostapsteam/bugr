@@ -8,7 +8,7 @@ log = logging.getLogger(__file__)
 def dispatch(request, botname):
     log.info("%s - call", botname)
     try:
-        bot = Bot.get(name=botname)
+        bot = Bot.objects.get(name=botname)
     except Bot.DoesNotExist:
         raise Http404("Bot {} doesn't exist".format(botname))
     return HttpResponse("1")
