@@ -57,9 +57,8 @@ class Bot(Proto):
         assert resp.ok, resp.reason
 
     def handle(self, request):
-
-
-
-        self.sendMessage()
+        chat_id = request["chat"]["id"]
+        text = request["message"]["text"]
+        self.sendMessage(chat_id=chat_id, text="Recieve: " + text)
 
 
