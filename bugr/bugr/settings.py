@@ -76,9 +76,6 @@ WSGI_APPLICATION = 'bugr.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/tmp/bugr.db.sqlite3',
-    } if DEBUG else {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bugr',
         'USER': 'bugruser',
