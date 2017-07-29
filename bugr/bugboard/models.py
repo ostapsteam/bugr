@@ -16,13 +16,13 @@ class Proto(models.Model):
     name = models.CharField(max_length=128, null=False, blank=False)
     desc = models.TextField(null=True, blank=True)
 
-    created_by = models.ForeignKey(TUser, null=False, blank=False)
+    created_by = models.ForeignKey(TUser, null=False, blank=False, related_name='+')
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
 
-    updated_by = models.ForeignKey(TUser, null=False, blank=False)
+    updated_by = models.ForeignKey(TUser, null=False, blank=False, related_name='+')
     updated_at = models.DateTimeField(auto_now=True, blank=False, null=False)
 
-    deleted_by = models.ForeignKey(TUser, null=True, blank=True)
+    deleted_by = models.ForeignKey(TUser, null=True, blank=True, related_name='+')
     deleted_at = models.DateTimeField(blank=True, null=True)
 
     @property
