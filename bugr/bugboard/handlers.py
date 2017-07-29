@@ -1,5 +1,4 @@
 import logging
-from .models import Proposal
 
 log = logging.getLogger(__file__)
 CMD = {}
