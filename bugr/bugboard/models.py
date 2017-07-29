@@ -56,10 +56,10 @@ class Bot(Proto):
         resp = requests.post(self.get_url("sendMessage"), data=kwargs)
         assert resp.ok, resp.reason
 
-    def handle(self, request):
-        log.info("Req: %s", requests)
-        chat_id = request["chat"]["id"]
-        text = request["message"]["text"]
+    def handle(self, msg):
+        log.info("Req: %s", msg)
+        chat_id = msg["chat"]["id"]
+        text = msg["message"]["text"]
         self.sendMessage(chat_id=chat_id, text="Recieve: " + text)
 
 
