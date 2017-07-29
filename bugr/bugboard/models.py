@@ -58,7 +58,7 @@ class Bot(Proto):
 
     def handle(self, msg):
         log.info("Req: %s", msg)
-        chat_id = msg["chat"]["id"]
+        chat_id = msg["message"]["chat"]["id"]
         text = msg["message"]["text"]
         self.sendMessage(chat_id=chat_id, text="Recieve: " + text)
 
