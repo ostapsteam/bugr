@@ -42,6 +42,24 @@ class Proto(models.Model):
         abstract = True
 
 
+CMD = {}
+def register(label):
+    def decorator(f):
+        def wrapper(*args, **kwargs):
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+@register("/help")
+def help():
+    return "Хелпер"
+
+
+def call(cmd, *args):
+    return CMD[cmd](*args)
+
+
 class Bot(Proto):
     name = models.CharField(max_length=128, null=False, blank=False, unique=True)
     token = models.CharField(max_length=128, null=False, blank=False)
@@ -57,11 +75,19 @@ class Bot(Proto):
         assert resp.ok, resp.reason
 
     def handle(self, msg):
-        log.info("Req: %s", msg)
-        m = msg["message"]
-        log.info("%r", m)
-        chat_id = m["chat"]["id"]
+        log.info("Req: %r", msg)
+        chat_id = msg["message"]["chat"]["id"]
         text = msg["message"]["text"]
-        self.sendMessage(chat_id=chat_id, text="Recieve: " + text)
+
+        cmd = self.prepare_command(text)
+        if cmd:
+            self.sendMessage(chat_id=chat_id, text=call(cmd[0], *cmd[1:]))
+
+    def prepare_command(self, text):
+        parts = text.split()
+        if parts:
+            cmd = parts[0]
+            if len(cmd) > 1 and cmd.startswith("/"):
+                return parts
 
 
