@@ -14,8 +14,20 @@ def register(label):
 @register("/help")
 def help():
     return "Хелпер\n\n" \
-           "/мои_заявки\n" \
-           "/подать_заявку\n\n"
+           "/my_requests - мои заявки\n" \
+           "/create_request - создать заявку\n\n"
+
+
+@register("/my_requests")
+def my_requests():
+    text = "Мои заявки\n\n"
+    return text
+
+
+@register("/create_request")
+def create_requests():
+    text = "Создать заявку\n\n"
+    return text
 
 
 def call(cmd, *args):
