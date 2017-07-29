@@ -14,8 +14,8 @@ def register(label):
 @register("/help")
 def help():
     return "Хелпер\n\n" \
-           "/Мои_заявки\n" \
-           "/Подать_заявку\n\n"
+           "/мои_заявки\n" \
+           "/подать_заявку\n\n"
 
 
 def call(cmd, *args):
