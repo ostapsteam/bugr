@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import datetime
+import logging
 
+log = logging.getLogger(__file__)
 
 class TUser(models.Model):
     uid = models.CharField(max_length=16, null=False, blank=False, unique=True)
@@ -16,18 +18,18 @@ class Proto(models.Model):
     name = models.CharField(max_length=128, null=False, blank=False)
     desc = models.TextField(null=True, blank=True)
 
-    created_by = models.ForeignKey(TUser, null=False, blank=False, related_name='+')
-    created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+    created_by = models.ForeignKey(TUser, null=True, blank=True, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
-    updated_by = models.ForeignKey(TUser, null=False, blank=False, related_name='+')
-    updated_at = models.DateTimeField(auto_now=True, blank=False, null=False)
+    updated_by = models.ForeignKey(TUser, null=True, blank=True, related_name='+')
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     deleted_by = models.ForeignKey(TUser, null=True, blank=True, related_name='+')
     deleted_at = models.DateTimeField(blank=True, null=True)
 
     @property
     def is_active(self):
-        return self.deleted_by is None
+        return self.deleted_at is None
 
     def delete(self, user):
         self.deleted_by = user
