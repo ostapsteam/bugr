@@ -91,7 +91,7 @@ def create_requests(update):
 
 @register("/help", desc="помощь")
 def help(update):
-    return "Хелпер\n\n" + "\n".join([render_cmd(x) for x in ("/my_requests", "create_request")])
+    return "Хелпер\n\n" + "\n".join([render_cmd(x) for x in ("/my_requests", "/create_request")])
 
 
 @register("/my_requests", desc="мои заявки")
@@ -102,6 +102,6 @@ def my_requests(update):
         proposals = Proposal.objects.order_by("-id")[:5]
         text += "\n".join(proposals)
     else:
-        text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("create_request", "/help")])
+        text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
     return text
 
