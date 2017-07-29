@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 import logging
 import requests
+from .handlers import call
 
 log = logging.getLogger(__file__)
 
@@ -42,27 +43,6 @@ class Proto(models.Model):
         abstract = True
 
 
-CMD = {}
-
-
-def register(label):
-    def decorator(f):
-        def wrapper(*args, **kwargs):
-            return f(*args, **kwargs)
-        return wrapper
-    return decorator
-
-
-@register("/help")
-def help():
-    return "Хелпер"
-
-
-def call(cmd, *args):
-    log.info("Call %s%r form %r", cmd[0], tuple(cmd[1:]), CMD)
-    return CMD[cmd](*args)
-
-
 class Bot(Proto):
     name = models.CharField(max_length=128, null=False, blank=False, unique=True)
     token = models.CharField(max_length=128, null=False, blank=False)
@@ -82,9 +62,10 @@ class Bot(Proto):
         chat_id = msg["message"]["chat"]["id"]
         text = msg["message"]["text"]
 
-        cmd = self.prepare_command(text)
-        if cmd:
-            self.sendMessage(chat_id=chat_id, text=call(cmd[0], *cmd[1:]))
+        parts = self.prepare_command(text)
+        if parts:
+            cmd, *args = parts
+            self.sendMessage(chat_id=chat_id, text=call(cmd, *args))
 
     def prepare_command(self, text):
         parts = text.split()
