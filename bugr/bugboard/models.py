@@ -10,7 +10,7 @@ class TUser(models.Model):
 
     joined_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
-    def __repr__(self):
+    def __unicode__(self):
         return "#{} ({})".format(self.uid, self.name)
 
 
@@ -44,5 +44,5 @@ class Bot(Proto):
     name = models.CharField(max_length=128, null=False, blank=False, unique=True)
     token = models.CharField(max_length=128, null=False, blank=False)
 
-    def __repr__(self):
+    def __unicode__(self):
         return self.name
