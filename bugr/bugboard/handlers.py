@@ -1,40 +1,52 @@
 import logging
+from .models import Proposal
 
 log = logging.getLogger(__file__)
 CMD = {}
+DESC = {}
 
 
-def register(label):
+def register(label, desc=None):
     def decorator(f):
         CMD[label] = f
+        if desc:
+            DESC[label] = desc
         return f
     return decorator
 
 
-@register("/help")
-def help():
-    return "Хелпер\n\n" \
-           "/my_requests - мои заявки\n" \
-           "/create_request - создать заявку\n\n"
+def render_cmd(label, desc=None):
+    return "{} - {}".format(label, desc if desc else DESC[label])
 
 
-@register("/my_requests")
-def my_requests():
-    text = "Мои заявки\n\n"
+@register("/help", desc="помощь")
+def help(update):
+    return "Хелпер\n\n" + "\n".join([render_cmd(x) for x in ("/my_requests", "create_request")])
+
+
+@register("/my_requests", desc="мои заявки")
+def my_requests(update):
+    count = Proposal.objects.count()
+    if count:
+        text = "Мои заявки ({})\n\n".format(count)
+        proposals = Proposal.objects.order_by("-id")[:5]
+        text += "\n".join(proposals)
+    else:
+        text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("create_request", "/help")])
     return text
 
 
-@register("/create_request")
-def create_requests():
+@register("/create_request", desc="создать заявку")
+def create_requests(update):
     text = "Создать заявку\n\n"
     return text
 
 
-def call(cmd, *args):
+def call(update, cmd, *args):
     if cmd not in CMD:
         return
     log.info("Call %s%r", cmd, tuple(args))
     try:
-        return CMD[cmd](*args)
+        return CMD[cmd](update, *args)
     except:
         log.exception("Error")

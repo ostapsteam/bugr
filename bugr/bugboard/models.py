@@ -43,6 +43,12 @@ class Proto(models.Model):
         abstract = True
 
 
+class Proposal(Proto):
+
+    def __unicode__(self):
+        return "/req_{} - {}".format(self.id, self.name)
+
+
 class Bot(Proto):
     name = models.CharField(max_length=128, null=False, blank=False, unique=True)
     token = models.CharField(max_length=128, null=False, blank=False)
@@ -65,7 +71,7 @@ class Bot(Proto):
         parts = self.prepare_command(text)
         if parts:
             cmd, *args = parts
-            text = call(cmd, *args)
+            text = call(msg, cmd, *args)
             if text:
                 self.sendMessage(chat_id=chat_id, text=text)
 
