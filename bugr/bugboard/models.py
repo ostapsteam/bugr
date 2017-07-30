@@ -79,11 +79,7 @@ class Bot(Proto):
     def handle(self, update: Update):
         log.info("Req: %r", update)
         chat_id = update.get_chat_id()
-        text = update.get_text()
-
-        sender = TUser.get_user(**update.sender)
-
-        parts = self.prepare_command(text)
+        parts = update.prepare_command()
         if parts:
             cmd, *args = parts
             text = call(update, cmd, *args)
