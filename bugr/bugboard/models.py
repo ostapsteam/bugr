@@ -28,13 +28,18 @@ class TUser(models.Model):
 
     @staticmethod
     def get_user(id, first_name, last_name, language_code):
-        return TUser.objects.update_or_create(
+        obj, created = TUser.objects.update_or_create(
             uid=id, defaults={
                 "first_name": first_name,
                 "last_name": last_name,
                 "language_code": language_code
             }
         )
+        if created:
+            log.info("%s was created now", obj)
+        else:
+            log.info("%s was fetched", obj)
+        return obj
 
     def __str__(self):
         return "/user{} ({})".format(self.uid, self.name)
