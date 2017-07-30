@@ -83,6 +83,7 @@ class Bot(Proto):
         return "https://api.telegram.org/bot{}/{}".format(self.token, method)
 
     def sendMessage(self, **kwargs):
+        log.info("Sending %r", kwargs)
         resp = requests.post(self.get_url("sendMessage"), data=kwargs)
         assert resp.ok, resp.reason
 
