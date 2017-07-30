@@ -112,10 +112,14 @@ def help(bot, update):
 @register("^/my_requests$", desc="мои заявки")
 def my_requests(bot, update):
     sender = TUser.get_user(**update.sender)
-    count = Proposal.objects.count()
+    proposals = Proposal.objects.filter(
+        asignee=sender,
+        deleted_at=None
+    )
+    count = proposals.count()
     if count:
         text = "Мои заявки ({})\n\n".format(count)
-        proposals = Proposal.objects.order_by("-id")[:5]
+        proposals = proposals.order_by("-id")[:5]
         text += "\n".join([str(p) for p in proposals])
     else:
         text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
@@ -124,9 +128,9 @@ def my_requests(bot, update):
 
 @register("^/req(?P<proposal_id>[0-9]+)$")
 def req(bot, update, proposal_id):
-    #sender = TUser.get_user(**update.sender)
+    sender = TUser.get_user(**update.sender)
     try:
-        proposal = Proposal.objects.get(id=proposal_id)
+        proposal = Proposal.objects.get(id=proposal_id, asignee=sender)
         text = "*{}*\n".format(proposal.name)
         if proposal.created_by:
             text += "{} _{:%m.%d.%Y %H:%m}_\n".format(proposal.created_by, proposal.created_at)
