@@ -18,7 +18,7 @@ class TUser(models.Model):
 
     @staticmethod
     def get_user(id, first_name, last_name, language_code):
-        return Bot.objects.update_or_create(
+        return TUser.objects.update_or_create(
             uid=id, defaults={
                 "first_name": first_name,
                 "last_name": last_name,
