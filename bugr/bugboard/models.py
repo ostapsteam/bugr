@@ -68,6 +68,8 @@ class Proto(models.Model):
 
 class Proposal(Proto):
 
+    asignee = models.ForeignKey(TUser, null=False, blank=False)
+
     def __str__(self):
         return "/req{} {}".format(self.id, self.name)
 
@@ -88,7 +90,7 @@ class Bot(Proto):
         assert resp.ok, resp.reason
 
     def handle(self, update: Update):
-        log.info("Req: %r", update)
+        log.info("Req: %s", update)
         parts = update.prepare_command()
         if parts:
             cmd, *args = parts
@@ -109,6 +111,7 @@ def help(bot, update):
 
 @register("^/my_requests$", desc="мои заявки")
 def my_requests(bot, update):
+    sender = TUser.get_user(**update.sender)
     count = Proposal.objects.count()
     if count:
         text = "Мои заявки ({})\n\n".format(count)
