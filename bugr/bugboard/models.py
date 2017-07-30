@@ -87,18 +87,18 @@ class Bot(Proto):
                 self.sendMessage(chat_id=chat_id, text=text)
 
 
-@register("/create_request", desc="создать заявку")
+@register("^/create_request$", desc="создать заявку")
 def create_requests(update):
     text = "Создать заявку\n\n"
     return text
 
 
-@register("/help", desc="помощь")
+@register("^/help$", desc="помощь")
 def help(update):
     return "Хелпер\n\n" + "\n".join([render_cmd(x) for x in ("/my_requests", "/create_request")])
 
 
-@register("/my_requests", desc="мои заявки")
+@register("^/my_requests$", desc="мои заявки")
 def my_requests(update):
     count = Proposal.objects.count()
     if count:
@@ -110,7 +110,7 @@ def my_requests(update):
     return text
 
 
-@register("/req_(?P<proposal_id>[0-9]+)")
+@register("^/req_(?P<proposal_id>[0-9]+)$")
 def req(update):
     count = Proposal.objects.count()
     if count:
