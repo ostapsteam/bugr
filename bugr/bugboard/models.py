@@ -37,7 +37,7 @@ class TUser(models.Model):
         )
 
     def __str__(self):
-        return "/user_{} ({})".format(self.uid, self.name)
+        return "/user{} ({})".format(self.uid, self.name)
 
 
 class Proto(models.Model):
@@ -69,7 +69,7 @@ class Proto(models.Model):
 class Proposal(Proto):
 
     def __str__(self):
-        return "/req_{} - {}".format(self.id, self.name)
+        return "/req{} {}".format(self.id, self.name)
 
 
 class Bot(Proto):
@@ -119,7 +119,7 @@ def my_requests(bot, update):
     bot.sendMessage(chat_id=update.chat_id, text=text)
 
 
-@register("^/req_(?P<proposal_id>[0-9]+)$")
+@register("^/req(?P<proposal_id>[0-9]+)$")
 def req(bot, update, proposal_id):
     #sender = TUser.get_user(**update.sender)
     try:
