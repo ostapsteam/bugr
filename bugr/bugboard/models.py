@@ -111,12 +111,13 @@ def my_requests(update):
 
 
 @register("^/req_(?P<proposal_id>[0-9]+)$")
-def req(update):
-    count = Proposal.objects.count()
-    if count:
-        text = "Мои заявки ({})\n\n".format(count)
-        proposals = Proposal.objects.order_by("-id")[:5]
-        text += "\n".join([str(p) for p in proposals])
-    else:
-        text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
-    return text
+def req(update, proposal_id):
+    #sender = TUser.get_user(**update.sender)
+    try:
+        proposal = Proposal.objects.get(id=proposal_id)
+        text = ""
+        text += "**{}**\n\n".format(proposal.name)
+        text += proposal.desc
+        return text
+    except Proposal.DoesNotExist:
+        log.warn("'%s' doesn't exist but queried", proposal)
