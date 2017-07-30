@@ -12,13 +12,18 @@ class TUser(models.Model):
     uid = models.CharField(max_length=16, null=False, blank=False, unique=True)
     first_name = models.CharField(max_length=128, blank=True, null=True)
     last_name = models.CharField(max_length=128, blank=True, null=True)
+    language_code = models.CharField(max_length=16, blank=True, null=True)
 
     joined_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     @staticmethod
-    def get_user(id, first_name, last_name):
+    def get_user(id, first_name, last_name, language_code):
         return Bot.objects.update_or_create(
-            uid=id, defaults={"first_name": first_name, "last_name": last_name}
+            uid=id, defaults={
+                "first_name": first_name,
+                "last_name": last_name,
+                "language_code": language_code
+            }
         )
 
     def __str__(self):
