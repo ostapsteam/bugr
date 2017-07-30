@@ -114,7 +114,7 @@ def my_requests(bot, update):
     sender = TUser.get_user(**update.sender)
     proposals = Proposal.objects.filter(
         asignee=sender,
-        deleted_at=None
+        deleted_at__isnull=True
     )
     count = proposals.count()
     if count:
