@@ -24,11 +24,11 @@ def render_cmd(label, desc=None):
     return text
 
 
-def call(update, cmd, *args):
+def call(bot, update, cmd, *args):
     fn, fargs = find_command(cmd)
     log.info("Call %s%r", cmd, tuple(args))
     try:
-        return fn(update, *args, **fargs)
+        return fn(bot, update, *args, **fargs)
     except:
         log.exception("Error")
 

@@ -4,8 +4,14 @@ import logging
 import requests
 from .handlers import call, render_cmd, register
 from .update import Update
+import enum
 
 log = logging.getLogger(__file__)
+
+
+class ParseMode(enum.Enum):
+    HTML = "HTML"
+    Markdown = "Markdown"
 
 
 class TUser(models.Model):
@@ -15,6 +21,10 @@ class TUser(models.Model):
     language_code = models.CharField(max_length=16, blank=True, null=True)
 
     joined_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
+
+    @property
+    def name(self):
+        return " ".join([x for x in (self.first_name, self.last_name) if x])
 
     @staticmethod
     def get_user(id, first_name, last_name, language_code):
@@ -27,7 +37,7 @@ class TUser(models.Model):
         )
 
     def __str__(self):
-        return "#{} ({})".format(self.uid, self.name)
+        return "/user_{} ({})".format(self.uid, self.name)
 
 
 class Proto(models.Model):
@@ -78,28 +88,26 @@ class Bot(Proto):
 
     def handle(self, update: Update):
         log.info("Req: %r", update)
-        chat_id = update.get_chat_id()
         parts = update.prepare_command()
         if parts:
             cmd, *args = parts
-            text = call(update, cmd, *args)
-            if text:
-                self.sendMessage(chat_id=chat_id, text=text)
+            call(self, update, cmd, *args)
 
 
 @register("^/create_request$", desc="создать заявку")
-def create_requests(update):
+def create_requests(bot, update):
     text = "Создать заявку\n\n"
-    return text
+    bot.sendMessage(chat_id=update.chat_id, text=text)
 
 
 @register("^/help$", desc="помощь")
-def help(update):
-    return "Хелпер\n\n" + "\n".join([render_cmd(x) for x in ("/my_requests", "/create_request")])
+def help(bot, update):
+    text = "Хелпер\n\n" + "\n".join([render_cmd(x) for x in ("/my_requests", "/create_request")])
+    bot.sendMessage(chat_id=update.chat_id, text=text)
 
 
 @register("^/my_requests$", desc="мои заявки")
-def my_requests(update):
+def my_requests(bot, update):
     count = Proposal.objects.count()
     if count:
         text = "Мои заявки ({})\n\n".format(count)
@@ -107,17 +115,19 @@ def my_requests(update):
         text += "\n".join([str(p) for p in proposals])
     else:
         text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
-    return text
+    bot.sendMessage(chat_id=update.chat_id, text=text)
 
 
 @register("^/req_(?P<proposal_id>[0-9]+)$")
-def req(update, proposal_id):
+def req(bot, update, proposal_id):
     #sender = TUser.get_user(**update.sender)
     try:
         proposal = Proposal.objects.get(id=proposal_id)
         text = ""
-        text += "**{}**\n\n".format(proposal.name)
+        if proposal.created_by:
+            text += "_от {} {}_".format(proposal.created_by, proposal.created_at)
+        text += "*{}*\n\n".format(proposal.name)
         text += proposal.desc
-        return text
+        bot.sendMessage(chat_id=update.chat_id, text=text, parse_mode=ParseMode.Markdown)
     except Proposal.DoesNotExist:
         log.warn("'%s' doesn't exist but queried", proposal)

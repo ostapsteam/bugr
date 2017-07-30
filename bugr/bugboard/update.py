@@ -6,7 +6,8 @@ class Update:
     def get_text(self):
         return self._msg["message"]["text"]
 
-    def get_chat_id(self):
+    @property
+    def chat_id(self):
         return self._msg["message"]["chat"]["id"]
 
     @property
