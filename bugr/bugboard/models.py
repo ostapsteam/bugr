@@ -126,7 +126,7 @@ def req(bot, update, proposal_id):
         proposal = Proposal.objects.get(id=proposal_id)
         text = ""
         if proposal.created_by:
-            text += "_от {} {:%m.%d.%Y %H:%m}_\n".format(proposal.created_by, proposal.created_at)
+            text += "{} _{:%m.%d.%Y %H:%m}_\n".format(proposal.created_by, proposal.created_at)
         text += "*{}*\n\n".format(proposal.name)
         text += str(proposal.desc)
         bot.sendMessage(chat_id=update.chat_id, text=text, parse_mode=ParseMode.Markdown.value)

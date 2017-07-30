@@ -26,6 +26,11 @@ def render_cmd(label, desc=None):
 
 def call(bot, update, cmd, *args):
     fn, fargs = find_command(cmd)
+
+    if not fn:
+        log.warn("Command not found for %s", cmd)
+        return
+
     log.info("Call %s%r", cmd, tuple(args))
     try:
         return fn(bot, update, *args, **fargs)
