@@ -25,5 +25,5 @@ class Update:
             if len(cmd) > 1 and cmd.startswith("/"):
                 return parts
 
-    def __srt__(self):
+    def __str__(self):
         return str(self._msg)
