@@ -128,6 +128,6 @@ def req(bot, update, proposal_id):
             text += "_от {} {}_".format(proposal.created_by, proposal.created_at)
         text += "*{}*\n\n".format(proposal.name)
         text += proposal.desc
-        bot.sendMessage(chat_id=update.chat_id, text=text, parse_mode=ParseMode.Markdown)
+        bot.sendMessage(chat_id=update.chat_id, text=text, parse_mode=ParseMode.Markdown.value)
     except Proposal.DoesNotExist:
         log.warn("'%s' doesn't exist but queried", proposal)
