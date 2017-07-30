@@ -124,10 +124,9 @@ def req(bot, update, proposal_id):
     #sender = TUser.get_user(**update.sender)
     try:
         proposal = Proposal.objects.get(id=proposal_id)
-        text = ""
+        text = "*{}*\n".format(proposal.name)
         if proposal.created_by:
             text += "{} _{:%m.%d.%Y %H:%m}_\n".format(proposal.created_by, proposal.created_at)
-        text += "*{}*\n\n".format(proposal.name)
         text += str(proposal.desc)
         bot.sendMessage(chat_id=update.chat_id, text=text, parse_mode=ParseMode.Markdown.value)
     except Proposal.DoesNotExist:

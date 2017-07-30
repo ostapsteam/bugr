@@ -24,3 +24,6 @@ class Update:
             cmd = parts[0]
             if len(cmd) > 1 and cmd.startswith("/"):
                 return parts
+
+    def __srt__(self):
+        return str(self._msg)
