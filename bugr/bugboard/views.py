@@ -5,6 +5,7 @@ from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Bot
+from .update import Update
 
 log = logging.getLogger(__file__)
 
@@ -17,5 +18,6 @@ def dispatch(request, botname):
     except Bot.DoesNotExist:
         raise Http404("Bot {} doesn't exist".format(botname))
     json_data = json.loads(request.body.decode('utf-8'))
-    resp = bot.handle(json_data)
+
+    resp = bot.handle(Update(json_data))
     return HttpResponse(resp)

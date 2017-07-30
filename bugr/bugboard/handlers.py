@@ -1,12 +1,14 @@
 import logging
+import re
 
 log = logging.getLogger(__file__)
 CMD = {}
 DESC = {}
 
 
-def register(label, desc=None):
+def register(l, desc=None):
     def decorator(f):
+        label = re.compile(l)
         CMD[label] = f
         if desc:
             DESC[label] = desc
@@ -23,10 +25,17 @@ def render_cmd(label, desc=None):
 
 
 def call(update, cmd, *args):
-    if cmd not in CMD:
-        return
+    fn, fargs = find_command(cmd)
     log.info("Call %s%r", cmd, tuple(args))
     try:
-        return CMD[cmd](update, *args)
+        return fn(update, *args, **fargs)
     except:
         log.exception("Error")
+
+
+def find_command(cmd):
+    for pattern, fn in CMD.items():
+        result = re.match(pattern, cmd)
+        if result:
+            return fn, result.groupdict()
+    return None, None

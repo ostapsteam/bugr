@@ -3,15 +3,23 @@ from datetime import datetime
 import logging
 import requests
 from .handlers import call, render_cmd, register
+from .update import Update
 
 log = logging.getLogger(__file__)
 
 
 class TUser(models.Model):
     uid = models.CharField(max_length=16, null=False, blank=False, unique=True)
-    name = models.CharField(max_length=128, blank=False, null=False)
+    first_name = models.CharField(max_length=128, blank=True, null=True)
+    last_name = models.CharField(max_length=128, blank=True, null=True)
 
     joined_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
+
+    @staticmethod
+    def get_user(id, first_name, last_name):
+        return Bot.objects.update_or_create(
+            uid=id, defaults={"first_name": first_name, "last_name": last_name}
+        )
 
     def __str__(self):
         return "#{} ({})".format(self.uid, self.name)
@@ -63,24 +71,19 @@ class Bot(Proto):
         resp = requests.post(self.get_url("sendMessage"), data=kwargs)
         assert resp.ok, resp.reason
 
-    def handle(self, msg):
-        log.info("Req: %r", msg)
-        chat_id = msg["message"]["chat"]["id"]
-        text = msg["message"]["text"]
+    def handle(self, update: Update):
+        log.info("Req: %r", update)
+        chat_id = update.get_chat_id()
+        text = update.get_text()
+
+        sender = TUser.get_user(**update.sender)
 
         parts = self.prepare_command(text)
         if parts:
             cmd, *args = parts
-            text = call(msg, cmd, *args)
+            text = call(update, cmd, *args)
             if text:
                 self.sendMessage(chat_id=chat_id, text=text)
-
-    def prepare_command(self, text):
-        parts = text.split()
-        if parts:
-            cmd = parts[0]
-            if len(cmd) > 1 and cmd.startswith("/"):
-                return parts
 
 
 @register("/create_request", desc="создать заявку")
@@ -105,3 +108,14 @@ def my_requests(update):
         text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
     return text
 
+
+@register("/req_(?P<proposal_id>[0-9]+)")
+def req(update):
+    count = Proposal.objects.count()
+    if count:
+        text = "Мои заявки ({})\n\n".format(count)
+        proposals = Proposal.objects.order_by("-id")[:5]
+        text += "\n".join([str(p) for p in proposals])
+    else:
+        text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
+    return text
