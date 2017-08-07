@@ -22,6 +22,8 @@ class TUser(models.Model):
 
     joined_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
+    dialog = models.ForeignKey(Dialog, null=True, blank=False)
+
     @property
     def name(self):
         return " ".join([x for x in (self.first_name, self.last_name) if x])
@@ -40,6 +42,11 @@ class TUser(models.Model):
         else:
             log.info("%s was fetched", obj)
         return obj
+
+    def start_dialog(self, questions):
+        dialog = Dialog()
+        for question in questions:
+            dialog.add_question(question)
 
     def __str__(self):
         return "/user{} ({})".format(self.uid, self.name)
@@ -77,6 +84,38 @@ class Proposal(Proto):
 
     def __str__(self):
         return "/req{} {}".format(self.id, self.name)
+
+
+class Dialog(models.Model):
+    closed = models.BooleanField(null=False, blank=False, default=False)
+    terminated = models.BooleanField(null=False, blank=False, default=False)
+
+    def get_question(self):
+        return Question.objects.filter(answered=False).first()
+
+    def add_question(self, question_text):
+        Question.objects.create(dialog=self, question_text=question_text)
+
+
+class Question(models.Model):
+    dialog = models.ForeignKey(Dialog, null=False, blank=False)
+    question_text = models.CharField(max_length=256, null=False, blank=False)
+    answer_text = models.CharField(max_length=256, null=True, blank=True)
+
+    is_sent = models.BooleanField(blank=False, null=False, default=False)
+    skiped = models.BooleanField(blank=False, null=False, default=False)
+    answered = models.BooleanField(blank=False, null=False, default=False)
+
+    def skip(self):
+        self.skiped = True
+        self.answered = True
+
+    def answer(self, text):
+        self.answer_text = text
+        self.answered = True
+
+    def set_sent(self):
+        self.is_sent = True
 
 
 class Bot(Proto):
