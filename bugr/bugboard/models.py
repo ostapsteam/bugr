@@ -14,6 +14,38 @@ class ParseMode(enum.Enum):
     Markdown = "Markdown"
 
 
+class Question(models.Model):
+    dialog = models.ForeignKey('Dialog', null=False, blank=False)
+    question_text = models.CharField(max_length=256, null=False, blank=False)
+    answer_text = models.CharField(max_length=256, null=True, blank=True)
+
+    is_sent = models.BooleanField(blank=False, null=False, default=False)
+    skiped = models.BooleanField(blank=False, null=False, default=False)
+    answered = models.BooleanField(blank=False, null=False, default=False)
+
+    def skip(self):
+        self.skiped = True
+        self.answered = True
+
+    def answer(self, text):
+        self.answer_text = text
+        self.answered = True
+
+    def set_sent(self):
+        self.is_sent = True
+
+
+class Dialog(models.Model):
+    closed = models.BooleanField(null=False, blank=False, default=False)
+    terminated = models.BooleanField(null=False, blank=False, default=False)
+
+    def get_question(self):
+        return Question.objects.filter(answered=False).first()
+
+    def add_question(self, question_text):
+        Question.objects.create(dialog=self, question_text=question_text)
+
+
 class TUser(models.Model):
     uid = models.CharField(max_length=16, null=False, blank=False, unique=True)
     first_name = models.CharField(max_length=128, blank=True, null=True)
@@ -84,38 +116,6 @@ class Proposal(Proto):
 
     def __str__(self):
         return "/req{} {}".format(self.id, self.name)
-
-
-class Dialog(models.Model):
-    closed = models.BooleanField(null=False, blank=False, default=False)
-    terminated = models.BooleanField(null=False, blank=False, default=False)
-
-    def get_question(self):
-        return Question.objects.filter(answered=False).first()
-
-    def add_question(self, question_text):
-        Question.objects.create(dialog=self, question_text=question_text)
-
-
-class Question(models.Model):
-    dialog = models.ForeignKey(Dialog, null=False, blank=False)
-    question_text = models.CharField(max_length=256, null=False, blank=False)
-    answer_text = models.CharField(max_length=256, null=True, blank=True)
-
-    is_sent = models.BooleanField(blank=False, null=False, default=False)
-    skiped = models.BooleanField(blank=False, null=False, default=False)
-    answered = models.BooleanField(blank=False, null=False, default=False)
-
-    def skip(self):
-        self.skiped = True
-        self.answered = True
-
-    def answer(self, text):
-        self.answer_text = text
-        self.answered = True
-
-    def set_sent(self):
-        self.is_sent = True
 
 
 class Bot(Proto):
