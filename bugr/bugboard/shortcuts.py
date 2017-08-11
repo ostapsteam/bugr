@@ -15,6 +15,6 @@ def reply_with_tpl(tpl):
     def decor(f):
         def wrap(bot, update):
             ctx = f(bot, update)
-            bot.sendMessage(chat_id=update.chat_id, text=render_to_string(tpl, ctx))
+            bot.sendMessage(chat_id=update.chat_id, text=render_to_string(tpl, ctx or {}))
         return wrap
     return decor
