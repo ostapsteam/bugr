@@ -1,9 +1,15 @@
+import enum
 import logging
 import re
 
 log = logging.getLogger(__file__)
 CMD = {}
 DESC = {}
+
+
+class ParseMode(enum.Enum):
+    HTML = "HTML"
+    Markdown = "Markdown"
 
 
 def register(l, desc=None):

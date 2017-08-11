@@ -1,10 +1,11 @@
-import json
 import logging
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Bot
+from .shortcuts import get_json
 from .update import Update
 
 log = logging.getLogger(__file__)
@@ -13,11 +14,7 @@ log = logging.getLogger(__file__)
 @csrf_exempt
 def dispatch(request, botname):
     log.info("%s - call", botname)
-    try:
-        bot = Bot.objects.get(name=botname)
-    except Bot.DoesNotExist:
-        raise Http404("Bot {} doesn't exist".format(botname))
-    json_data = json.loads(request.body.decode('utf-8'))
-
+    bot = get_object_or_404(Bot, name=botname)
+    json_data = get_json(request.body.decode('utf-8'))
     resp = bot.handle(Update(json_data))
     return HttpResponse(resp)
