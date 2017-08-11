@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .bots.register import register, render_cmd, ParseMode
 from .models import Bot, TUser, Proposal
-from .shortcuts import get_json
+from .shortcuts import get_json, reply_with_tpl
 from .update import Update
 
 log = logging.getLogger(__file__)
@@ -28,10 +28,10 @@ def create_requests(bot, update):
     bot.sendMessage(chat_id=update.chat_id, text=text)
 
 
+@reply_with_tpl("myvortex/help.html")
 @register("^/help$", desc="помощь")
 def help(bot, update):
-    text = "Хелпер\n\n" + "\n".join([render_cmd(x) for x in ("/my_requests", "/create_request")])
-    bot.sendMessage(chat_id=update.chat_id, text=text)
+    pass
 
 
 @register("^/my_requests$", desc="мои заявки")
