@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Bot
 from .shortcuts import get_json
 from .update import Update
+from .bots.handlers import *
 
 log = logging.getLogger(__file__)
 
