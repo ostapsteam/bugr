@@ -1,11 +1,10 @@
-import enum
 import logging
 from datetime import datetime
 
 import requests
 from django.db import models
 
-from bugr.bugboard.bots.register import call, render_cmd, register
+from .bots.register import call
 from .update import Update
 
 log = logging.getLogger(__file__)
