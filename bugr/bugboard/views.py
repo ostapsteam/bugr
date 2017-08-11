@@ -35,7 +35,7 @@ def help(bot, update):
 
 
 @register("^/my_requests$", desc="мои заявки")
-@reply_with_tpl("myvortex/my_requests.html")
+@reply_with_tpl("myvortex/my_requests.html", parse_mode=ParseMode.Markdown.value)
 def my_requests(bot, update):
     sender = TUser.get_user(**update.sender)
     proposals = Proposal.objects.filter(
@@ -51,14 +51,13 @@ def my_requests(bot, update):
 
 
 @register("^/req(?P<proposal_id>[0-9]+)$")
+@reply_with_tpl("myvortex/req.html", parse_mode=ParseMode.Markdown.value)
 def req(bot, update, proposal_id):
     sender = TUser.get_user(**update.sender)
     try:
         proposal = Proposal.objects.get(id=proposal_id, asignee=sender)
-        text = "*{}*\n".format(proposal.name)
-        if proposal.created_by:
-            text += "{} _{:%m.%d.%Y %H:%m}_\n".format(proposal.created_by, proposal.created_at)
-        text += str(proposal.desc)
-        bot.sendMessage(chat_id=update.chat_id, text=text, parse_mode=ParseMode.Markdown.value)
+        return {
+            "proposal": proposal
+        }
     except Proposal.DoesNotExist:
         log.warn("'%s' doesn't exist but queried", proposal)

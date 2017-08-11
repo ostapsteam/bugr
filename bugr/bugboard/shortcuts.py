@@ -11,10 +11,14 @@ def get_json(data):
         raise SuspiciousOperation("Can't parse message")
 
 
-def reply_with_tpl(tpl):
+def reply_with_tpl(tpl, parse_mode=None):
     def decor(f):
         def wrap(bot, update):
             ctx = f(bot, update)
-            bot.sendMessage(chat_id=update.chat_id, text=render_to_string(tpl, ctx or {}))
+            bot.sendMessage(
+                chat_id=update.chat_id,
+                text=render_to_string(tpl, ctx or {}),
+                parse_mode=parse_mode
+            )
         return wrap
     return decor
