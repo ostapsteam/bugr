@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
-from bugr.bugboard.bots.register import register, render_cmd, ParseMode
+from .bots.register import register, render_cmd, ParseMode
 from .models import Bot, TUser, Proposal
 from .shortcuts import get_json
 from .update import Update
