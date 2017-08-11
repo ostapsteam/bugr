@@ -23,9 +23,9 @@ def dispatch(request, botname):
 
 # Handlers
 @register("^/create_request$", desc="создать заявку")
+@reply_with_tpl("myvortex/create_request.html")
 def create_requests(bot, update):
-    text = "Создать заявку\n\n"
-    bot.sendMessage(chat_id=update.chat_id, text=text)
+    pass
 
 
 @register("^/help$", desc="помощь")
@@ -35,6 +35,7 @@ def help(bot, update):
 
 
 @register("^/my_requests$", desc="мои заявки")
+@reply_with_tpl("myvortex/my_requests.html")
 def my_requests(bot, update):
     sender = TUser.get_user(**update.sender)
     proposals = Proposal.objects.filter(
@@ -42,13 +43,11 @@ def my_requests(bot, update):
         deleted_at__isnull=True
     )
     count = proposals.count()
-    if count:
-        text = "Мои заявки ({})\n\n".format(count)
-        proposals = proposals.order_by("-id")[:5]
-        text += "\n".join([str(p) for p in proposals])
-    else:
-        text = "У Вас нет актиных заявок\n\n" + "\n".join([render_cmd(x) for x in ("/create_request", "/help")])
-    bot.sendMessage(chat_id=update.chat_id, text=text)
+    proposals = proposals.order_by("-id")[:5]
+    return {
+        "proposals": proposals,
+        "proposals_count": count
+    }
 
 
 @register("^/req(?P<proposal_id>[0-9]+)$")
