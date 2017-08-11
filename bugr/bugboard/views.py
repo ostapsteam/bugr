@@ -28,8 +28,8 @@ def create_requests(bot, update):
     bot.sendMessage(chat_id=update.chat_id, text=text)
 
 
-@reply_with_tpl("myvortex/help.html")
 @register("^/help$", desc="помощь")
+@reply_with_tpl("myvortex/help.html")
 def help(bot, update):
     pass
 
