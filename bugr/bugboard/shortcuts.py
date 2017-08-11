@@ -13,8 +13,8 @@ def get_json(data):
 
 def reply_with_tpl(tpl, parse_mode=None):
     def decor(f):
-        def wrap(bot, update):
-            ctx = f(bot, update)
+        def wrap(bot, update, *args, **kwargs):
+            ctx = f(bot, update, *args, **kwargs)
             bot.sendMessage(
                 chat_id=update.chat_id,
                 text=render_to_string(tpl, ctx or {}),
