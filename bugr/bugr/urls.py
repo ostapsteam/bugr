@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from boter import urls as boter_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^boter/', include('boter.urls'))
+    url(r'^boter/', boter_urls),
 ]
