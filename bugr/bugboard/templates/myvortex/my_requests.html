@@ -1,8 +1,6 @@
 {% if proposals_count > 0 %}
 <b>Мои заявки</b>
-{% for proposal in proposals %}
-- {{ proposal.name }}
-{% endfor %}
+{% for proposal in proposals %}- {{ proposal.name }}{% endfor %}
 {% else %}
 Нет активных заявок
 {% endif %}
