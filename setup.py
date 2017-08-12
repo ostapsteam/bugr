@@ -32,4 +32,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=['django', 'mysqlclient', 'boter'],
+    dependency_links=[
+        'https://testpypi.python.org/pypi/boter'
+    ]
 )
