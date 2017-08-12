@@ -15,7 +15,6 @@ setup(
     license='BSD License',  # example license
     description='A simple Django app container',
     long_description=README,
-    ur
     author='Alex Korotkov',
     author_email='alexkorotkovru@yandex.ru',
     classifiers=[
