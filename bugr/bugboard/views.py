@@ -35,7 +35,7 @@ def help(bot, update):
 
 
 @register("^/my_requests$", desc="мои заявки")
-@reply_with_tpl("myvortex/my_requests.html", parse_mode=ParseMode.Markdown.value)
+@reply_with_tpl("myvortex/my_requests.html", parse_mode=ParseMode.HTML.value)
 def my_requests(bot, update):
     sender = TUser.get_user(**update.sender)
     proposals = Proposal.objects.filter(
@@ -51,7 +51,7 @@ def my_requests(bot, update):
 
 
 @register("^/req(?P<proposal_id>[0-9]+)$")
-@reply_with_tpl("myvortex/req.html", parse_mode=ParseMode.Markdown.value)
+@reply_with_tpl("myvortex/req.html", parse_mode=ParseMode.HTML.value)
 def req(bot, update, proposal_id):
     sender = TUser.get_user(**update.sender)
     try:
