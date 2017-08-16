@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'boter',
+    'peo',
 ]
 
 MIDDLEWARE = [
@@ -76,13 +78,13 @@ WSGI_APPLICATION = 'bugr.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': 'bugr',
         'USER': 'bugruser',
         'PASSWORD': '123',
         'HOST': '127.0.0.1',
         'PORT': '3306',
-    }
+    },
 }
 
 
