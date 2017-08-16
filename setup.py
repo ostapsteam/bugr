@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='bugr',
-    version='0.12',
+    version='0.13',
     packages=find_packages(),
     include_package_data=True,
     license='BSD License',  # example license
@@ -32,6 +32,7 @@ setup(
     ],
     install_requires=['Django', 'mysqlclient', 'boter', 'peo'],
     dependency_links=[
-        'https://testpypi.python.org/pypi/boter'
+        'https://testpypi.python.org/pypi/boter',
+        'https://testpypi.python.org/pypi/peo',
     ]
 )
