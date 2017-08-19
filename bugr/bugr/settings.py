@@ -71,8 +71,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bugr.wsgi.application'
-GDAL_LIBRARY_PATH = '/usr/lib/ogdi/libgdal.so'
-GEOS_LIBRARY_PATH = '/usr/lib/aarch64-linux-gnu/libgeos_c.so.1'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
