@@ -78,12 +78,11 @@ WSGI_APPLICATION = 'bugr.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'bugr',
         'USER': 'bugruser',
-        'PASSWORD': '123',
+        'PASSWORD': 'bugrpass',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
     },
 }
 
