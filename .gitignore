@@ -2,7 +2,8 @@
 env/
 dist/
 *.egg*
-*logfile*
-*mydatabase*
+*logfile
+*mydatabase
 *__pycache__*
 *.pyc
+bugr/static/admin/

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'j53-jvml2b_tz8=brds0-bsvodf$mj!()0k*)xa))mn+c+%295'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = bool(os.environ.get("PRD")) or True
 
 ALLOWED_HOSTS = ['localhost']
 
@@ -125,6 +125,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 LOGGING = {
     'version': 1,
