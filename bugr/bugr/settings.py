@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',
-    'boter',
     'peo',
 ]
 
@@ -75,14 +73,21 @@ WSGI_APPLICATION = 'bugr.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+schema_sqlite = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': 'mydatabase'
+}
+
+schema_mysql = {
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': 'bugr',
+    'USER': 'bugruser',
+    'PASSWORD': '123',
+    'HOST': '127.0.0.1',
+}
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'bugr',
-        'USER': 'bugruser',
-        'PASSWORD': 'bugrpass',
-        'HOST': '127.0.0.1',
-    },
+    'default': schema_mysql if os.environ.get("PRD") else schema_sqlite
 }
 
 
@@ -109,13 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -123,7 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "/home/bugr/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 LOGGING = {
     'version': 1,

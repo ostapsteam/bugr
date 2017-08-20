@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='bugr',
-    version='0.17',
+    version='0.18',
     packages=find_packages(),
     include_package_data=True,
     license='BSD License',  # example license
@@ -29,10 +29,5 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-    ],
-    install_requires=['Django', 'psycopg2', 'boter', 'peo'],
-    dependency_links=[
-        'https://testpypi.python.org/pypi/boter',
-        'https://testpypi.python.org/pypi/peo',
     ]
 )

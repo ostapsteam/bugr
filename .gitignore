@@ -2,4 +2,6 @@
 env/
 dist/
 *.egg*
-logfile
+*logfile*
+*mydatabase*
+*__pycache__*
