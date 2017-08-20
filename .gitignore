@@ -5,3 +5,4 @@ dist/
 *logfile*
 *mydatabase*
 *__pycache__*
+*.pyc
