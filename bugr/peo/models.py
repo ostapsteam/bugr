@@ -1,5 +1,5 @@
 from protos.models.proto import GeoProto
-# from django.db import models
+from django.db import models
 
 
 class Lab(GeoProto):
