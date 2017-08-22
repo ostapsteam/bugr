@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
+from osm_field.fields import LatitudeField, LongitudeField, OSMField
 
 
 class ProtoQuerySet(models.QuerySet):
@@ -34,12 +35,16 @@ class Proto(models.Model):
 
 
 class GeoProto(Proto):
-    lat = models.DecimalField(max_digits=10, decimal_places=10)
-    lon = models.DecimalField(max_digits=10, decimal_places=10)
+    # lat = models.DecimalField(max_digits=10, decimal_places=8)
+    # lon = models.DecimalField(max_digits=11, decimal_places=8)
+    #
+    # @property
+    # def coordinate(self):
+    #     return self.lat, self.lon
 
-    @property
-    def coordinate(self):
-        return self.lat, self.lon
+    location = OSMField(null=True, blank=True)
+    location_lat = LatitudeField(null=True, blank=True)
+    location_lon = LongitudeField(null=True, blank=True)
 
     class Meta:
         abstract = True
